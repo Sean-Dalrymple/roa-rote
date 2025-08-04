@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#00d8ff" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <title>SWGOH ROTE Platoon Assignments</title>
+  <link rel="stylesheet" href="css/rote_style.css" />
+</head>
+<body>
+
+<span class="top-menu" style="display: flex; flex-direction: row;">
+<nav>
+  <div class="menu-dropdown">
+    <button class="menu-button">≡ Menu</button>
+    <div class="dropdown-content" id="id_menuDropdown">
+      <a href="javascript:loadAssignmentPage();">Platoon Assignments</a>
+      <a href="javascript:loadRoTEPage();">RoTE Daily Plan</a>
+                <a href="javascript:loadTWPage();">Territory War Def</a>
+                <a href="javascript:loadCountersPage();">Territory War Counters</a>
+      <a href="javascript:loadAboutPage();">About</a>
+      <a href="javascript:loadSettingsPage();">Settings</a>
+    </div>
+  </div>
+</nav>
+<!-- <select id="playerSelect" onchange="changePlayer()" style="margin: 0 0 0 auto;"></select> -->
+<p id="id_page_name" style="margin: auto 10px auto auto;"></p>
+</span>
+
+<div id="id_main_container" class="main-container">
+</div>
+  <script src="js/rote.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").then(
+      () => console.log("Service Worker registered"),
+      err => console.error("Service Worker registration failed:", err)
+    ).then(
+      () =>  initializeApp()
+    );
+  });
+}
+
+</script>
+
+</body>
+</html>

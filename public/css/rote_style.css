@@ -1,0 +1,206 @@
+body {
+  background: radial-gradient(ellipse at center, #0b0f2f 0%, #000 100%);
+  font-family: 'Share Tech Mono', monospace;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 2px #00d8ff;
+}
+h1 {
+  color: #ffffff;
+  text-align: center;
+  text-shadow: 0 0 8px #0ff;
+  font-size: 2em;
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+}
+p {
+  color: #ffffff;
+  text-align: center;
+  text-shadow: 0 0 8px #0ff;
+}
+label {
+color: #00d8ff;
+}
+table {
+  background-color: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 0 10px rgba(0, 216, 255, 0.3);
+  border: 1px solid rgba(0, 216, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.spacing-div {
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 10px;
+  border: 1px solid rgba(0, 216, 255, 0.2);
+  border-radius: 6px;
+  margin: 10px 0;
+} 
+
+@media (max-width: 600px) {
+  .spacing-div {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .spacing-div label {
+    margin-bottom: 6px;
+  }
+
+  .spacing-div select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+   /* General table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+
+    /* Select styling */
+    select {
+      background: rgba(0, 0, 50, 0.8);
+      color: #00d8ff;
+      border: 1px solid #00d8ff;
+      border-radius: 5px;
+      padding: 10px;
+      font-family: 'Share Tech Mono', monospace;
+      box-shadow: 0 0 8px #00d8ff;
+      text-shadow: 1px 1px 2px #000;
+      margin-right: 10px;
+    }
+
+    select:hover {
+      background-color: #2c2c2c;
+      box-shadow: 0 0 15px #f00;
+    }
+
+    .spacing-div {
+      margin: 5px 0;
+    }
+
+    /* Section styles */
+    .LS {
+      font-weight: 700;
+      font-size: 1.5em;
+      background: black;
+      margin: 5px 15px;
+      text-shadow: 0 0 5px #00ccff, 0 0 10px #00ccff, 0 0 20px #00ccff, 0 0 30px #00ccff;
+    }
+
+    .DS {
+      font-weight: 700;
+      font-size: 1.5em;
+      background: black;
+      margin: 5px 15px;
+      text-shadow: 0 0 5px #ff1111, 0 0 10px #ff1111, 0 0 20px #ff1111, 0 0 30px #ff1111;
+    }
+
+    .N {
+      font-weight: 700;
+      font-size: 1.5em;
+      background: black;
+      margin: 5px 15px;
+      text-shadow: 0 0 5px #ffff66, 0 0 10px #ffff66, 0 0 20px #ffff66, 0 0 30px #ffff66;
+    }
+
+    .Odd { background: #EEEEEE; }
+    .Even { background: #FFFFFF; }
+
+    .operation-cell {
+      text-align: center;
+      vertical-align: middle;
+      font-size: 1.3em;
+      font-weight: 700;
+    }
+
+    .unit-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    .unit-icon {
+      max-width: 35px;
+      max-height: 35px;
+      border-radius: 17px;
+      margin-right: 10px;
+    }
+
+.main-container {
+  padding: 20px;
+}
+
+.top-menu {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #000; /* or rgba if you want transparency */
+  box-shadow: 0 2px 8px rgba(0, 216, 255, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.menu-dropdown {
+  position: relative;
+  display: inline-block;
+  margin: 2px;
+}
+
+.menu-button {
+  background-color: rgba(0, 0, 50, 0.8);
+  color: #00d8ff;
+  border: 1px solid #00d8ff;
+  border-radius: 6px;
+  padding: 11px 16px;
+  font-family: 'Share Tech Mono', monospace;
+  box-shadow: 0 0 8px #00d8ff;
+  cursor: pointer;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #111;
+  min-width: 160px;
+  z-index: 10;
+  border: 1px solid #00d8ff;
+  box-shadow: 0 0 10px #00d8ff;
+}
+
+.dropdown-content a {
+  color: #00d8ff;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.dropdown-content a:hover {
+  background-color: #222;
+  color: #fff;
+}
+
+.menu-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+a.no-style,
+a.no-style:link,
+a.no-style:visited,
+a.no-style:hover,
+a.no-style:active {
+  color: inherit;
+  outline: 0;
+}
+

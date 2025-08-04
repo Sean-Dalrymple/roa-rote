@@ -1,0 +1,162 @@
+[
+    {
+        "Zone": "1",
+        "Label": "Rey",
+        "Teams": [
+            [
+                "GLREY",
+                "BENSOLO",
+                "CALKESTIS",
+                "FULCRUMAHSOKA",
+                "BARRISSOFFEE"
+            ]
+        ]
+    },
+    {
+        "Zone": "2",
+        "Label": "Reva",
+        "Teams": [
+            [
+                "THIRDSISTER",
+                "GRANDINQUISITOR",
+                "EIGHTHBROTHER",
+                "SEVENTHSISTER",
+                "FIFTHBROTHER"
+            ]
+        ]
+    },
+    {
+        "Zone": "3",
+        "Label": "Lord Vader, Spectre",
+        "Teams": [
+            [
+                "LORDVADER",
+                "OPERATIVE",
+                "APPO",
+                "SCORCH",
+                "DISGUISEDCLONETROOPER"
+            ],
+            [
+                "GLAHSOKATANO",
+                "EZRAEXILE",
+                "PADAWANSABINE",
+                "GENERALSYNDULLA",
+                "HUYANG"
+            ],
+            [
+              "LORDVADER",
+              "MAULS7",
+              "ADMIRALPIETT",
+              "NINTHSISTER",
+              "VADER"
+            ]
+        ]
+    },
+    {
+        "Zone": "4",
+        "Label": "Jabba, Gungan",
+        "Teams": [
+            [
+                "JABBATHEHUTT",
+                "EMBO",
+                "KRRSANTAN",
+                "BOUSHH",
+                "UNDERCOVERLANDO"
+            ],
+            [
+                "BOSSNASS",
+                "JARJARBINKS",
+                "BOOMADIER",
+                "GUNGANPHALANX",
+                "CAPTAINTARPALS"
+            ]
+        ]
+    },
+    {
+        "Zone": "5",
+        "Label": "Trench or other seps if no Trench",
+        "Teams": [
+            [
+                "TRENCH",
+                "COUNTDOOKU",
+                "JANGOFETT",
+                "NUTEGUNRAY",
+                "WATTAMBOR"
+            ],
+            [
+                "GEONOSIANBROODALPHA",
+                "GEONOSIANSOLDIER",
+                "GEONOSIANSPY",
+                "SUNFAC",
+                "POGGLETHELESSER"
+            ],
+            [
+                "GRIEVOUS",
+                "DROIDEKA",
+                "B1BATTLEDROIDV2",
+                "B2SUPERBATTLEDROID",
+                "STAP"
+            ]
+        ]
+    },
+    {
+        "Zone": "6",
+        "Label": "DTMG",
+        "Teams": [
+            [
+                "MOFFGIDEONS3",
+                "MOFFGIDEONS1",
+                "CAPTAINENOCH",
+                "DEATHTROOPER",
+                "SCOUTTROOPER_V3"
+            ]
+        ]
+    },
+    {
+        "Zone": "7",
+        "Label": "QA Republic",
+        "Teams": [
+            [
+                "QUEENAMIDALA",
+                "PADAWANOBIWAN",
+                "MASTERQUIGON",
+                "GRANDMASTERYODA",
+                "SHAAKTI"
+            ]
+        ]
+    },
+    {
+        "Zone": "8",
+        "Label": "KB Jedi",
+        "Teams": [
+            [
+                "KELLERANBEQ",
+                "KIADIMUNDI",
+                "ANAKINKNIGHT",
+                "MACEWINDU",
+                "PLOKOON"
+            ]
+        ]
+    },
+    {
+        "Zone": "Ship 1",
+        "Label": "Executor",
+        "Teams": [
+            [
+                "CAPITALEXECUTOR",
+                "HOUNDSTOOTH",
+                "PUNISHINGONE",
+                "RAZORCREST",
+                "XANADUBLOOD",
+                "SLAVE1",
+                "IG2000"
+            ]
+        ]
+    },
+    {
+        "Zone": "Ship 2",
+        "Label": "Your Choice",
+        "Teams": [
+        ]
+    }
+]

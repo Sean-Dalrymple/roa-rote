@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#00d8ff" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <title>Missing Platoon Finder</title>
+  <link rel="stylesheet" href="css/rote_style.css" />
+</head>
+<body>
+<div id="id_main_container" class="main-container">
+  <div class="spacing-div">
+<a href="/">back to main</a>
+  </div>
+
+  <div class="spacing-div">
+    <label for="phaseSelect">Select Phase:</label>
+    <select id="phaseSelect" onchange="buildCharacterList(this.value);">
+      <option value="0">Phase 1</option>
+      <option value="1">Phase 2</option>
+      <option value="2">Phase 3</option>
+      <option value="3">Phase 4</option>
+      <option value="4">Phase 5</option>
+      <option value="5">Phase 6</option>
+    </select>
+  </div>
+
+  <div class="spacing-div">
+    <label for="phaseSelect">Missing Toon:</label>
+    <select id="missingCharacter" onchange="buildPlayerList(this.value);">
+    </select>
+  </div>
+
+
+<table id="id_playersAssigned">
+  <colgroup>
+    <col />
+    <col style="width: 5em;"/>
+  </colgroup>
+  <thead>
+    <tr style="display: none;">
+      <th>Player</th>
+      <th>Operation</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div>
+  <script src="js/rote.js"></script>
+
+<script>
+
+let missingUnitMap = new Map();
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").then(
+      () => console.log("Service Worker registered"),
+      err => console.error("Service Worker registration failed:", err)
+    ).then(
+      () => { loadData().then( () => { buildCharacterList(0); }); }
+    );
+  });
+}
+
+
+
+function buildCharacterList(selectedPhase) {
+  missingUnitMap.clear();
+
+  // "allyCode":"863122853","unitBaseId":"EMPERORPALPATINE","zoneId":"tb3_mixed_phase01_conflict02_recon01"
+  var nameList = [];
+  var listSelections = "";
+
+  allAssignments[selectedPhase].forEach((assignment) => {
+    var unitName = unitMap.get(assignment.unitBaseId).unitName;
+    var playerName = playerMap.get(assignment.allyCode);
+    if( playerMap.has(assignment.allyCode) ) {
+      if( missingUnitMap.has(unitName)) {
+        missingUnitMap.get(unitName).push({"name": playerName, "zone": assignment.zoneId, "op": assignment.platoonDefinitionId});
+      } else {
+        missingUnitMap.set(unitName, [{"name": playerName, "zone": assignment.zoneId, "op": assignment.platoonDefinitionId}]);
+        nameList.push(unitName);
+      }
+    }
+  });
+  nameList = nameList.sort((a,b) => {
+    return (a < b) ? -1 : 1;
+  });
+  nameList.forEach((toon) => {
+    listSelections += `<option>${toon}</option>`;
+  });
+  document.getElementById("missingCharacter").innerHTML = listSelections;
+  buildPlayerList(document.getElementById("missingCharacter").value);
+}
+
+function buildPlayerList(selectedCharacter) {
+console.log(selectedCharacter);
+console.log(missingUnitMap.get(selectedCharacter));
+
+var playerHTML = "";
+missingUnitMap.get(selectedCharacter).forEach((player) => {
+playerHTML += `<tr><td><label>${player.name.name}</label></td><td><label>${territoryMap.get(player.zone).zoneColour} ${player.op.slice(-1)}</label></td></tr>`;
+});
+
+const tbody = document.querySelector(`#id_playersAssigned tbody`);
+tbody.innerHTML = playerHTML;
+
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#00d8ff" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <title>SWGOH ROTE Platoon Assignments</title>
+  <link rel="stylesheet" href="css/rote_style.css" />
+</head>
+<body>
+<div id="id_main_container" class="main-container">
+<div style="display: flex; width: 100%;">
+<div style="position: relative; margin: 0 auto;">
+<img src="img/TWMapZones.png" style="max-width: 100%" alt="Interactive Map">
+
+<svg viewBox="0 0 473 381" width="473px" xmlns="http://www.w3.org/2000/svg" style="position: absolute; top: 0; left: 0; max-width: 100%;">
+  <style>
+    .zone {
+      fill: #00d8ff;
+      fill-opacity: 0;
+      stroke: #00d8ff;
+      stroke-width: 2;
+      stroke-opacity: 0;
+      cursor: pointer;
+      transition: fill-opacity 0.2s ease;
+    }
+    .zone:hover {
+      fill-opacity: 0.5;
+    }
+    .selected {
+      fill-opacity: 0.65;
+    }
+    text {
+      fill: white;
+      font-size: 12px;
+      pointer-events: none;
+    }
+  </style>
+
+  <!-- Zones 1–8 -->
+  <polygon class="zone" data-zone="1" points="373,28,394,40,408,52,421,62,433,79,441,94,447,110,452,126,453,140,453,150,419,150,402,141,373,141,354,150,354,144,337,126,346,80,369,56" />
+  <polygon class="zone" data-zone="2" points="352,156,371,149,402,149,418,157,453,157,447,197,431,233,406,267,378,295,350,318,327,331,297,346,306,299,336,261" />
+  <polygon class="zone" data-zone="3" points="288,10,314,13,340,15,366,25,362,56,336,81,328,127,344,142,311,141,287,151,248,150" />
+  <polygon class="zone" data-zone="4" points="346,147,326,262,297,300,287,351,250,364,217,370,182,372,228,210,240,210,247,180,275,156,289,156,308,147" />
+  <polygon class="zone" data-zone="5" points="166,107,189,94,219,94,226,102,254,102,239,156,270,156,241,177,234,204,183,204,175,192,149,191,127,202" />
+  <polygon class="zone" data-zone="6" points="126,208,145,197,173,198,182,210,222,210,173,372,148,370,122,366,102,360,88,353,112,288,105,258" />
+  <polygon class="zone" data-zone="7" points="50,125,105,103,131,101,145,109,159,109,120,204,60,204,50,188,16,189,32,152" />
+  <polygon class="zone" data-zone="8" points="15,193,47,194,56,210,117,209,97,262,104,290,79,350,50,329,28,304,16,279,9,241" />
+
+  <!-- Ships -->
+  <polygon class="zone" data-zone="Ship 1" points="185,29,208,20,233,13,257,9,283,10,256,97,227,97,219,89,194,89,169,102,194,37" />
+  <polygon class="zone" data-zone="Ship 2" points="179,31,189,39,162,104,147,104,135,97,109,97,54,119,79,91,98,76,131,52" />
+</svg>
+</div>
+</div>
+<span id="id_teamSpan" style="display: none;">
+<select id="id_toon1"></select>
+<select id="id_toon2"></select>
+<select id="id_toon3"></select>
+<select id="id_toon4"></select>
+<select id="id_toon5"></select>
+<button class="menu-button" onclick="addTeamSuggestion();"><label>+</label></button>
+</span>
+<table id="id_teamSuggestions">
+  <colgroup>
+    <col />
+  </colgroup>
+  <thead>
+    <tr style="display: none;">
+      <th>Team</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+<table id="id_warDefTable">
+      <colgroup>
+        <col style="width: 5.5em;" />
+        <col />
+      </colgroup>
+      <thead>
+        <tr style="display: none;">
+          <th>Zone</th>
+          <th>Instructions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+</table>
+
+</div>
+  <script src="js/rote.js"></script>
+
+<script>
+let selectedZone = "";
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").then(
+      () => console.log("Service Worker registered"),
+      err => console.error("Service Worker registration failed:", err)
+    ).then( () => {
+       loadData().then( () => {
+                     buildWarDefEditTable();
+
+    const toon1Select = document.getElementById("id_toon1");
+    const toon2Select = document.getElementById("id_toon2");
+    const toon3Select = document.getElementById("id_toon3");
+    const toon4Select = document.getElementById("id_toon4");
+    const toon5Select = document.getElementById("id_toon5");
+
+  var sortedUnits = allUnits.sort((a,b) => { return a.unitName < b.unitName ? -1 : 1;});
+    sortedUnits.forEach((toon) => {
+      const option1 = document.createElement("option");
+      const option2 = document.createElement("option");
+      const option3= document.createElement("option");
+      const option4 = document.createElement("option");
+      const option5 = document.createElement("option");
+      option1.value = option2.value = option3.value = option4.value = option5.value = toon.unitBaseId;
+      option1.text =  option2.text =  option3.text =  option4.text =  option5.text = toon.unitName;
+      toon1Select.appendChild(option1);
+      toon2Select.appendChild(option2);
+      toon3Select.appendChild(option3);
+      toon4Select.appendChild(option4);
+      toon5Select.appendChild(option5);
+    });
+                  });
+               }
+    );
+  });
+}
+document.querySelectorAll('.zone').forEach(zone => {
+  zone.addEventListener('click', () => {
+    document.querySelectorAll('.selected').forEach( selectedZone => {
+        selectedZone.classList.remove("selected");
+    });
+    zone.classList.add("selected");
+    buildTeamSuggestionEditTable( zone.dataset.zone );
+ document.getElementById("id_teamSpan").style.display= "block";
+selectedZone = zone.dataset.zone;
+
+    //alert(`You clicked: ${zone.dataset.zone}`);
+  });
+});
+
+
+function addTeamSuggestion() {
+      const toon1Select = document.getElementById("id_toon1");
+        const toon2Select = document.getElementById("id_toon2");
+        const toon3Select = document.getElementById("id_toon3");
+        const toon4Select = document.getElementById("id_toon4");
+        const toon5Select = document.getElementById("id_toon5");
+  if( selectedZone > "0" && selectedZone < "9") {
+    warDef[parseInt(selectedZone)-1].Teams.push([toon1Select.value, toon2Select.value, toon3Select.value, toon4Select.value, toon5Select.value]);
+    buildTeamSuggestionEditTable( selectedZone );
+    localStorage.setItem("warDef", JSON.stringify(warDef));
+  } else if( selectedZone > "" ) {
+    warDef[parseInt(selectedZone.at(-1)) + 7].Teams.push([toon1Select.value, toon2Select.value, toon3Select.value, toon4Select.value, toon5Select.value]);
+    buildTeamSuggestionEditTable( selectedZone );
+    localStorage.setItem("warDef", JSON.stringify(warDef));
+  }
+}
+</script>
+
+</body>
+</html>

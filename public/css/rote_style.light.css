@@ -1,0 +1,182 @@
+body {
+  background: linear-gradient(#fdfdfd, #f0f4f8);
+  font-family: 'Share Tech Mono', monospace;
+  margin: 0;
+  padding: 0;
+  color: #1d2a35;
+  text-shadow: none;
+}
+
+h1 {
+  color: #0b3d91;
+  text-align: center;
+  text-shadow: 0 1px 0 #fff;
+  font-size: 2em;
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+}
+
+label {
+  color: #00537a;
+}
+
+/* Panels & Containers */
+.spacing-div {
+  background-color: #ffffff;
+  padding: 10px;
+  border: 1px solid #c6d6e2;
+  border-radius: 6px;
+  margin: 10px 0;
+}
+
+@media (max-width: 600px) {
+  .spacing-div {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .spacing-div label {
+    margin-bottom: 6px;
+  }
+  .spacing-div select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border: 1px solid #ccdce8;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #e0e7ef;
+}
+
+th {
+  background-color: #e6f0fa;
+  color: #003355;
+}
+
+/* Stripe rows */
+.Odd {
+  background: #f9fcfe;
+}
+.Even {
+  background: #ffffff;
+}
+
+/* Selects */
+select {
+  background: #ffffff;
+  color: #003355;
+  border: 1px solid #aacbe3;
+  border-radius: 5px;
+  padding: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  text-shadow: none;
+}
+
+/* Select Hover */
+select:hover {
+  background-color: #f0f7fd;
+  border-color: #0077cc;
+}
+
+/* Section Headers (LS/DS/N) */
+.LS, .DS, .N {
+  font-weight: 700;
+  font-size: 1.5em;
+  background: #ffffff;
+  margin: 5px 15px;
+  padding: 4px 10px;
+  border-left: 4px solid;
+}
+
+.LS {
+  border-color: #00aacc;
+  color: #007799;
+}
+
+.DS {
+  border-color: #cc3333;
+  color: #990000;
+}
+
+.N {
+  border-color: #d1c447;
+  color: #a08700;
+}
+
+/* Unit Wrapper */
+.unit-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.unit-icon {
+  max-width: 35px;
+  max-height: 35px;
+  border-radius: 17px;
+  margin-right: 10px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.15);
+}
+
+/* Menu Styles */
+.top-menu {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #ffffffee;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  backdrop-filter: blur(6px);
+}
+
+.menu-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.menu-button {
+  background-color: #e4f0fb;
+  color: #004466;
+  border: 1px solid #66b4e3;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-family: 'Share Tech Mono', monospace;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  min-width: 160px;
+  border: 1px solid #aacbe3;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+  z-index: 10;
+}
+
+.dropdown-content a {
+  color: #004466;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f0f7fd;
+}
+
+.menu-dropdown:hover .dropdown-content {
+  display: block;
+}

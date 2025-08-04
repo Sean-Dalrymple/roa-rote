@@ -1,0 +1,22 @@
+[
+{"zoneId":"tb3_mixed_phase01_conflict02_recon01","zoneName":"Mustafar","zoneColour":"DS"},
+{"zoneId":"tb3_mixed_phase01_conflict03_recon01","zoneName":"Corellia","zoneColour":"N"},
+{"zoneId":"tb3_mixed_phase01_conflict01_recon01","zoneName":"Coruscant","zoneColour":"LS"},
+{"zoneId":"tb3_mixed_phase02_conflict02_recon01","zoneName":"Geonosis","zoneColour":"DS"},
+{"zoneId":"tb3_mixed_phase02_conflict01_recon01","zoneName":"Bracca","zoneColour":"LS"},
+{"zoneId":"tb3_mixed_phase02_conflict03_recon01","zoneName":"Felucia","zoneColour":"N"},
+{"zoneId":"tb3_mixed_phase03_conflict02_recon01","zoneName":"Dathomir","zoneColour":"DS"},
+{"zoneId":"tb3_mixed_phase03_conflict03_recon01","zoneName":"Tatooine","zoneColour":"N"},
+{"zoneId":"tb3_mixed_phase03_conflict01_bonus_recon01","zoneName":"Zeffo","zoneColour":"LS"},
+{"zoneId":"tb3_mixed_phase03_conflict01_recon01","zoneName":"Kashyyyk","zoneColour":"LS"},
+{"zoneId":"tb3_mixed_phase04_conflict02_recon01","zoneName":"Haven-class Medical Station","zoneColour":"DS"},
+{"zoneId":"tb3_mixed_phase04_conflict03_bonus_recon01","zoneName":"Mandalore","zoneColour":"N"},
+{"zoneId":"tb3_mixed_phase04_conflict03_recon01","zoneName":"Kessel","zoneColour":"N"},
+{"zoneId":"tb3_mixed_phase04_conflict01_recon01","zoneName":"Lothal","zoneColour":"LS"},
+{"zoneId":"tb3_mixed_phase05_conflict02_recon01","zoneName":"Malachor","zoneColour":"DS"},
+{"zoneId":"tb3_mixed_phase05_conflict03_recon01","zoneName":"Vandor","zoneColour":"N"},
+{"zoneId":"tb3_mixed_phase05_conflict01_recon01","zoneName":"Ring of Kafrene","zoneColour":"LS"},
+{"zoneId":"tb3_mixed_phase06_conflict02_recon01","zoneName":"Death Star","zoneColour":"DS"},
+{"zoneId":"tb3_mixed_phase06_conflict03_recon01","zoneName":"Hoth","zoneColour":"N"},
+{"zoneId":"tb3_mixed_phase06_conflict01_recon01","zoneName":"Scarif","zoneColour":"LS"}
+]
