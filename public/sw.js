@@ -1,4 +1,4 @@
-const VERSION = "v1.0.3";
+const VERSION = "v1.0.7";
 
 const CACHE_NAME = "rote-cache-v1";
 const urlsToCache = [

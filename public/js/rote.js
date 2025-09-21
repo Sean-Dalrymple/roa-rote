@@ -353,12 +353,13 @@ function loadAssignmentPage() {
 
 function loadRoTEPage() {
   var pageHTML = `
+<p><a href="https://genskaar.github.io/tb_empire/index.html" target="_blank" class="no-style">TB Interactive Battle Map</a></p>
 <p><label>Day 1 - All platoons, all territories to 3 stars.  Please attack to make up for points.</label></p>
 <p><label>Day 2 - Neutral/LS - finish platoons, 3 stars.  DS - start all platoons, finish none, points but no stars.</label></p>
-<p><label>Day 3 - DS - finish platoons, 3 stars.  Neutral finish platoons, no stars, hit Reva.  LS - start all platoons, finish none. points but no stars.</label></p>
-<p><label>Day 4 - Neutral / LS - finish platoons, 3 stars. DS - start all platoons, finish none, points but no stars.</label></p>
-<p><label>Day 5 - DS- finish platoons, 3 stars. Neutral/LS - start marked platoons, finish none. points but no stars.</label></p>
-<p><label>Day 6 - Neutral/LS - finish marked platoons, three stars.  DS - Do what you can</label></p>`;
+<p><label>Day 3 - DS - finish platoons, 3 stars.  Neutral - finish ops 1, 2, 5, 6, no stars, hit Reva.  LS - 3 stars. finish ops 1, 3, 4, 5, 6.</label></p>
+<p><label>Day 4 - DS / Neutral - finish platoons, 3 stars. LS - start platoons 1, 2, 3. finish none, points but no stars.</label></p>
+<p><label>Day 5 - LS - finish platoons, 3 stars. Neutral - start marked platoons, finish none. points but no stars.  build DS, Mandalore?</label></p>
+<p><label>Day 6 - Neutral - finish marked platoons, three stars.  DS - three stars.  Mandalore?</label></p>`;
   document.getElementById("id_main_container").innerHTML = pageHTML
   document.getElementById('id_page_name').innerHTML='<label>RoTE Plan</label>';
   reloadMenu();
@@ -555,7 +556,7 @@ function loadCountersPage() {
 
 function loadAboutPage() {
 document.getElementById("id_main_container").innerHTML = `<h1>RoA ROTE Platoon Assignments</h1>
-<p style="color: white;">Version 1.0.3</p>
+<p style="color: white;">Version 1.0.6</p>
 <p style="color: white;">Copyright 2025, I guess?</p><p>Copy it all you want.</p>
 <p>"Mi código es tu código" as they really don't say anywhere.</p>
 <p style="color: white;">data version: ${localStorage.getItem("dataVersion")}</p>`;
@@ -612,7 +613,11 @@ function saveAlt() {
 
 function loadAltAccounts() {
   playerAlts.forEach((altId) => {
-    addPlayerAltRow(altId, players.find(obj => obj.allyCode === altId).name);
+    if( players.find(obj => obj.allyCode === altId) == null ) {
+      addPlayerAltRow(altId, "* Account removed *");
+    } else {
+      addPlayerAltRow(altId, players.find(obj => obj.allyCode === altId).name);
+    }
   });
 }
 
