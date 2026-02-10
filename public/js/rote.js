@@ -467,7 +467,7 @@ function showPhaseTargets(phase) {
 }
 
 async function checkForPlanData() {
-  if(rotePlan === null || rotePlan.length == 0) {
+  if(rotePlan === null || rotePlan.length == 0 || warCalendar === null || warCalendar.length == 0) {
     localStorage.setItem("dataVersion", "0");
     await loadData();
   }
@@ -530,6 +530,7 @@ function loadRoTEPage() {
 }
 
 function loadTWCalendarPage() {
+  checkForPlanData().then( () => {
   document.getElementById('id_page_name').innerHTML='<label>TW Calendar</label>';
   var mainAccount = localStorage.getItem("selectedPlayer");
   if(!mainAccount) {
@@ -554,7 +555,8 @@ function loadTWCalendarPage() {
     warInfo.appendChild(warLabel);
     document.getElementById("id_main_container").appendChild(warInfo);
   });
-  
+
+});
   reloadMenu();
 }
 
