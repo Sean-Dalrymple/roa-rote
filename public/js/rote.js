@@ -554,6 +554,8 @@ function loadTWCalendarPage() {
     warInfo.appendChild(warLabel);
     document.getElementById("id_main_container").appendChild(warInfo);
   });
+  
+  reloadMenu();
 }
 
 function buildWarDefTable() {
