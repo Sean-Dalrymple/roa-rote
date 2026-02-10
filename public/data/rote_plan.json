@@ -1,0 +1,56 @@
+[
+{
+    "phase": 1,
+    "plan": [
+        {"zoneId":"tb3_mixed_phase01_conflict02_recon01","stars":3,"instructions":""},
+        {"zoneId":"tb3_mixed_phase01_conflict03_recon01","stars":3,"instructions":""},
+        {"zoneId":"tb3_mixed_phase01_conflict01_recon01","stars":3,"instructions":""}
+    ],
+    "instructions":""
+},
+{
+    "phase": 2,
+    "plan": [
+        {"zoneId":"tb3_mixed_phase02_conflict02_recon01","stars":3,"instructions":""},
+        {"zoneId":"tb3_mixed_phase02_conflict03_recon01","stars":3,"instructions":""},
+        {"zoneId":"tb3_mixed_phase02_conflict01_recon01","stars":3,"instructions":""}
+    ],
+    "instructions":"Combat is required to make up points."
+},
+{
+    "phase": 3,
+    "plan": [
+        {"zoneId":"tb3_mixed_phase03_conflict02_recon01","stars":3,"instructions":""},
+        {"zoneId":"tb3_mixed_phase03_conflict03_recon01","stars":0,"instructions":"Hit Reva and Krayt."},
+        {"zoneId":"tb3_mixed_phase03_conflict01_recon01","stars":3,"instructions":""}
+    ],
+    "instructions":""
+},
+{
+    "phase": 4,
+    "plan": [
+        {"zoneId":"tb3_mixed_phase04_conflict02_recon01","stars":0,"instructions":""},
+        {"zoneId":"tb3_mixed_phase03_conflict03_recon01","stars":3,"instructions":"Hit Reva and Krayt."},
+        {"zoneId":"tb3_mixed_phase04_conflict01_recon01","stars":0,"instructions":""}
+    ],
+    "instructions":""
+},
+{
+    "phase": 5,
+    "plan": [
+        {"zoneId":"tb3_mixed_phase04_conflict02_recon01","stars":3,"instructions":""},
+        {"zoneId":"tb3_mixed_phase04_conflict03_bonus_recon01","stars":0,"instructions":""},
+        {"zoneId":"tb3_mixed_phase04_conflict03_recon01","stars":0,"instructions":""},
+        {"zoneId":"tb3_mixed_phase04_conflict01_recon01","stars":3,"instructions":""}
+    ],
+    "instructions":""
+},
+{
+    "phase": 6,
+    "plan": [
+        {"zoneId":"tb3_mixed_phase04_conflict03_bonus_recon01","stars":1,"instructions":""},
+        {"zoneId":"tb3_mixed_phase04_conflict03_recon01","stars":3,"instructions":""}
+    ],
+    "instructions":""
+}
+]

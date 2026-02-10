@@ -134,22 +134,21 @@
     },
     {
         "Zone": "8",
-        "Label": "Your choiie",
+        "Label": "Your Choice",
         "Teams": [
         ]
     },
     {
         "Zone": "Ship 1",
-        "Label": "Executor",
+        "Label": "Leviathan",
         "Teams": [
             [
-                "CAPITALEXECUTOR",
-                "HOUNDSTOOTH",
-                "PUNISHINGONE",
-                "RAZORCREST",
-                "XANADUBLOOD",
-                "SLAVE1",
-                "IG2000"
+                "CAPITALLEVIATHAN",
+                "FURYCLASSINTERCEPTOR",
+                "SITHBOMBER",
+                "TIEDAGGER",
+                "SITHINFILTRATOR",
+                "SITHSUPREMACYCLASS"
             ]
         ]
     },

@@ -1,6 +1,6 @@
-const VERSION = "v1.0.7";
+const VERSION = "v1.0.12";
 
-const CACHE_NAME = "rote-cache-v1";
+const CACHE_NAME = "rote-cache-v2";
 const urlsToCache = [
   "./",
   "./index.html",

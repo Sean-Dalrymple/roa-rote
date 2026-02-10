@@ -4,15 +4,18 @@
   let unitMap = new Map();
   let territoryMap = new Map();
   let playerMap = new Map();
+  let missingUnitMap = new Map();
   let players = [];
   let playerAlts = [];
   let warDef = [];
+  let rotePlan = [];
 
 async function initializeApp() {
     await loadData();
     await loadSelectedPage();
 }
 
+//      <a href="javascript:loadCountersPage();">Territory War Counters</a>
 function reloadMenu() {
   const menuDiv = document.getElementById("id_menuDropdown");
   menuDiv.innerHTML = "";
@@ -20,9 +23,9 @@ function reloadMenu() {
     document.getElementById("id_menuDropdown").innerHTML = `<a href="javascript:loadAssignmentPage();">Platoon Assignments</a>
       <a href="javascript:loadRoTEPage();">RoTE Daily Plan</a>
       <a href="javascript:loadTWPage();">Territory War Def</a>
-      <a href="javascript:loadCountersPage();">Territory War Counters</a>
       <a href="javascript:loadAboutPage();">About</a>
-      <a href="javascript:loadSettingsPage();">Settings</a>`;
+      <a href="javascript:loadSettingsPage();">Settings</a>
+      <a href="javascript:loadMissingPlatoonsPage();">Missing Platoons</a>`;
   }, 100);
 }
 
@@ -78,6 +81,7 @@ console.log("refreshing data");
         fetch("data/territories.json", { cache: "no-store" }),
         fetch("data/players.json", { cache: "no-store" }),
         fetch("data/war_def.json", { cache: "no-store" }),
+        fetch("data/rote_plan.json", { cache: "no-store" }),
       ]);
 
       const jsons = await Promise.all(responses.map((r) => r.json()));
@@ -91,6 +95,7 @@ console.log("refreshing data");
       allTerritories = jsons[7].sort((a, b) => a.zoneId.localeCompare(b.zoneId));
       players = jsons[8];
       warDef = jsons[9];
+      rotePlan = jsons[10];
 
       localStorage.setItem("dataVersion", assignmentVersion);
       localStorage.setItem("allAssignments", JSON.stringify(allAssignments));
@@ -98,6 +103,7 @@ console.log("refreshing data");
       localStorage.setItem("allTerritories", JSON.stringify(allTerritories));
       localStorage.setItem("players", JSON.stringify(players));
       localStorage.setItem("warDef", JSON.stringify(warDef));
+      localStorage.setItem("rotePlan", JSON.stringify(rotePlan));
 
 
       unitMap = new Map(allUnits.map(u => [u.unitBaseId, u]));
@@ -109,6 +115,7 @@ console.log("reading local data");
       allTerritories = JSON.parse(localStorage.getItem("allTerritories"));
       players = JSON.parse(localStorage.getItem("players"));
       warDef = JSON.parse(localStorage.getItem("warDef"));
+      rotePlan = JSON.parse(localStorage.getItem("rotePlan"));
 
       unitMap = new Map(allUnits.map(u => [u.unitBaseId, u]));
       territoryMap = new Map(allTerritories.map(t => [t.zoneId, t]));
@@ -295,6 +302,85 @@ function filterAssignments(allyCode) {
   tbody.appendChild(fragment);
 }
 
+function createStarsRow(stars, instructions) {
+  const row = document.createElement("tr");
+  row.appendChild(document.createElement("td"));
+  const cell = document.createElement("td").appendChild(document.createElement("label"));
+  cell.textContent = `${stars} stars ${instructions == "" ? "" : `- ${instructions}`}`;
+  row.appendChild(cell);
+  return row;
+}
+
+function getPlatoonAssignmentCount(phase, zoneId, platoon) {
+  const assignments = allAssignments[phase-1];
+  let count = 0;
+  for (let i = 0; i < assignments.length; i++) {
+    if (assignments[i].zoneId === zoneId && assignments[i].platoonDefinitionId === `tb3-platoon-${platoon}` && assignments[i].allyCode != "-1") {
+      count++;
+    }
+  }
+  return count;
+}
+
+function getPlatoonAssignmentStatus(phase, zoneId, platoon) {
+  let count = getPlatoonAssignmentCount(phase, zoneId, platoon);
+  if(count < 15 && phase > 0) {
+    count += getPlatoonAssignmentCount(phase-1, zoneId, platoon);
+  }
+  
+  const span = document.createElement("span")
+  switch(count) {
+    case 0:
+      span.textContent = "⛔";
+      break;
+    case 15:
+      span.textContent =  "✓";
+      span.style.color = "limegreen";
+      break;
+    default:
+      span.textContent =  "⚠";
+      span.style.color = "orange";
+      break;
+  }
+  return span
+}
+
+function createPlatoonsRow(phase, zoneId) {
+  const row = document.createElement("tr");
+  row.appendChild(document.createElement("td"));
+  const cell = document.createElement("td");
+  const platoonGrid = document.createElement("div");
+  platoonGrid.style.display = "grid";
+  platoonGrid.style.gridTemplateColumns = "repeat(2, 5.5em)";
+  platoonGrid.style.gap = "0px";
+  platoonGrid.style.borderTop = "1px solid #00d8ff";
+  platoonGrid.style.borderLeft = "1px solid #00d8ff";
+  platoonGrid.style.width = "fit-content";
+  
+  for(let i=1; i<4; i++) {
+    const gridItem = document.createElement("label");
+    gridItem.textContent = `${i} - `;
+    gridItem.style.padding = "10px 10px 10px 1em";
+    gridItem.style.borderRight = "1px solid #00d8ff";
+    gridItem.style.borderBottom = "1px solid #00d8ff";
+    gridItem.appendChild(getPlatoonAssignmentStatus(phase, zoneId, i));
+    platoonGrid.appendChild(gridItem);
+    const gridItem2 = document.createElement("label");
+    gridItem2.textContent = `${i+3} - `;
+    gridItem2.style.padding = "10px 10px 10px 1em";
+    gridItem2.style.borderRight = "1px solid #00d8ff";
+    gridItem2.style.borderBottom = "1px solid #00d8ff";
+    gridItem2.appendChild(getPlatoonAssignmentStatus(phase, zoneId, i+3));
+    platoonGrid.appendChild(gridItem2);
+  }
+  // ✓ ⛔ ⚠ 
+
+  cell.appendChild(platoonGrid);
+  row.appendChild(cell);
+  row.style.marginBottom = "10px";
+  return row;
+}
+
 function loadAssignmentPage() {
   var mainAccount = localStorage.getItem("selectedPlayer");
   var altList = JSON.parse(localStorage.getItem("altAccounts") || "[]");
@@ -351,18 +437,91 @@ function loadAssignmentPage() {
   reloadMenu();
 }
 
-function loadRoTEPage() {
-  var pageHTML = `
-<p><a href="https://genskaar.github.io/tb_empire/index.html" target="_blank" class="no-style">TB Interactive Battle Map</a></p>
+/*
 <p><label>Day 1 - All platoons, all territories to 3 stars.  Please attack to make up for points.</label></p>
-<p><label>Day 2 - Neutral/LS - finish platoons, 3 stars.  DS - start all platoons, finish none, points but no stars.</label></p>
-<p><label>Day 3 - DS - finish platoons, 3 stars.  Neutral - finish ops 1, 2, 5, 6, no stars, hit Reva.  LS - 3 stars. finish ops 1, 3, 4, 5, 6.</label></p>
-<p><label>Day 4 - DS / Neutral - finish platoons, 3 stars. LS - start platoons 1, 2, 3. finish none, points but no stars.</label></p>
-<p><label>Day 5 - LS - finish platoons, 3 stars. Neutral - start marked platoons, finish none. points but no stars.  build DS, Mandalore?</label></p>
-<p><label>Day 6 - Neutral - finish marked platoons, three stars.  DS - three stars.  Mandalore?</label></p>`;
+<p><label>Day 2 - All platoons, all territories to 3 stars.  Attacks are required to make up for points.</label></p>
+<p><label>Day 3 - DS, LS - finish all platoons, 3 stars.  Neutral - finish all platoons, no stars, hit Reva and Krayt.</label></p>
+<p><label>Day 4 - Neutral - 3 stars, hit Reva and Krayt. LS - start platoons 1, 2, 4. finish none, points but no stars.  DB - no stars</label></p>
+<p><label>Day 5 - LS - finish platoons, 3 stars. DS - 3 stars. Neutral - start platoons 1, 2, 3, 5, finish none. points but no stars.  Mandalore - start all platoons, no stars.</label></p>
+<p><label>Day 6 - Neutral - finish platoons, three stars.  Mandalore - finish platoons, 1 star.</label></p>
+*/
+function showPhaseTargets(phase) {
+  if(phase == 0) {
+    document.getElementById("bodyPhase1").style.display = "table-row-group";
+    document.getElementById("bodyPhase2").style.display = "table-row-group";
+    document.getElementById("bodyPhase3").style.display = "table-row-group";
+    document.getElementById("bodyPhase4").style.display = "table-row-group";
+    document.getElementById("bodyPhase5").style.display = "table-row-group";
+    document.getElementById("bodyPhase6").style.display = "table-row-group";
+  } else {
+    document.querySelectorAll("#rotePlanTable1 tbody").forEach(tbody => {
+      tbody.style.display = "none";
+    });
+    document.getElementById(`bodyPhase${phase}`).style.display = "table-row-group";
+  }
+}
+
+async function checkForPlanData() {
+  if(rotePlan === null || rotePlan.length == 0) {
+    localStorage.setItem("dataVersion", "0");
+    await loadData();
+  }
+}
+
+function asyncLoadRotEPage() {
+  
+  var pageHTML = `
+<a class="menu-button" style="text-decoration: none; margin-bottom: 10px; display:inline-block;" href="https://genskaar.github.io/tb_empire/index.html" target="_blank" class="no-style">🌐 TB Interactive Battle Map</a>
+  <div class="spacing-div">
+    <label for="phaseSelect">Select Phase:</label>
+    <select id="phaseSelect" onchange="showPhaseTargets(this.value)">
+      <option value="0">All</option>
+      <option value="1">Phase 1</option>
+      <option value="2">Phase 2</option>
+      <option value="3">Phase 3</option>
+      <option value="4">Phase 4</option>
+      <option value="5">Phase 5</option>
+      <option value="6">Phase 6</option>
+    </select>
+  </div>
+<div>
+<table id="rotePlanTable1">
+    <colgroup>
+      <col style="width: 2em;" />
+      <col />
+    </colgroup>
+    <thead>
+      <tr style="display: none;">
+        <th style="width: 2em;">Platoon</th>
+        <th>Unit</th>
+      </tr>
+    </thead>
+    <tbody id="bodyPhase1"><tr><th scope="rowgroup" headers="phase" colspan="2">Phase 1${rotePlan[0].instructions == "" ? "" : ` - ${rotePlan[0].instructions}`}</th></tr></tbody>
+    <tbody id="bodyPhase2"><tr><th scope="rowgroup" headers="phase" colspan="2">Phase 2${rotePlan[1].instructions == "" ? "" : ` - ${rotePlan[1].instructions}`}</th></tr></tbody>
+    <tbody id="bodyPhase3"><tr><th scope="rowgroup" headers="phase" colspan="2">Phase 3${rotePlan[2].instructions == "" ? "" : ` - ${rotePlan[2].instructions}`}</th></tr></tbody>
+    <tbody id="bodyPhase4"><tr><th scope="rowgroup" headers="phase" colspan="2">Phase 4${rotePlan[3].instructions == "" ? "" : ` - ${rotePlan[3].instructions}`}</th></tr></tbody>
+    <tbody id="bodyPhase5"><tr><th scope="rowgroup" headers="phase" colspan="2">Phase 5${rotePlan[4].instructions == "" ? "" : ` - ${rotePlan[4].instructions}`}</th></tr></tbody>
+    <tbody id="bodyPhase6"><tr><th scope="rowgroup" headers="phase" colspan="2">Phase 6${rotePlan[5].instructions == "" ? "" : ` - ${rotePlan[5].instructions}`}</th></tr></tbody>
+  </table>
+  </div>`;
   document.getElementById("id_main_container").innerHTML = pageHTML
   document.getElementById('id_page_name').innerHTML='<label>RoTE Plan</label>';
+rotePlan.forEach( (phase) => {
+  const tbody = document.querySelector(`#bodyPhase${phase.phase}`);
+  phase.plan.forEach( (territory) => {
+        const zone = territoryMap.get(territory.zoneId);
+        const zoneRow = createZoneRow(zone, 2);
+        tbody.appendChild(zoneRow);
+        tbody.appendChild(createStarsRow(territory.stars, territory.instructions));
+        tbody.appendChild(createPlatoonsRow(phase.phase, territory.zoneId));
+  });
+});
   reloadMenu();
+
+}
+
+function loadRoTEPage() {
+  checkForPlanData().then( () => {asyncLoadRotEPage();} );
 }
 
 function buildWarDefTable() {
@@ -556,7 +715,7 @@ function loadCountersPage() {
 
 function loadAboutPage() {
 document.getElementById("id_main_container").innerHTML = `<h1>RoA ROTE Platoon Assignments</h1>
-<p style="color: white;">Version 1.0.6</p>
+<p style="color: white;">Version 1.0.10</p>
 <p style="color: white;">Copyright 2025, I guess?</p><p>Copy it all you want.</p>
 <p>"Mi código es tu código" as they really don't say anywhere.</p>
 <p style="color: white;">data version: ${localStorage.getItem("dataVersion")}</p>`;
@@ -653,13 +812,107 @@ function loadSettingsPage() {
       <option value="loadAssignmentPage">Platoon Assignments</option>
       <option value="loadPlanPage">RoTE Daily Plan</option>
       <option value="loadTWPage">Territory War Def</option>
-      <option value="loadCountersPage">Territory War Counters</option>
     </select>
   </div>`;
+  //    <option value="loadCountersPage">Territory War Counters</option>
   document.getElementById('id_page_name').innerHTML='<label>Settings</label>';
   populatePlayerSelect(players);
   document.getElementById('altPlayerSelect').innerHTML=`${document.getElementById('playerSelect').innerHTML}`;
   loadAltAccounts();
   document.getElementById('startingPage').value = (localStorage.getItem('startPage') || 'loadAssignmentPage');
+  reloadMenu();
+}
+
+
+function buildCharacterList(selectedPhase) {
+  missingUnitMap.clear();
+
+  // "allyCode":"863122853","unitBaseId":"EMPERORPALPATINE","zoneId":"tb3_mixed_phase01_conflict02_recon01"
+  var nameList = [];
+  var listSelections = "";
+
+  allAssignments[selectedPhase].forEach((assignment) => {
+    var unitName = unitMap.get(assignment.unitBaseId).unitName;
+    var playerName = playerMap.get(assignment.allyCode);
+    if( playerMap.has(assignment.allyCode) ) {
+      if( missingUnitMap.has(unitName)) {
+        missingUnitMap.get(unitName).push({"name": playerName, "zone": assignment.zoneId, "op": assignment.platoonDefinitionId});
+      } else {
+        missingUnitMap.set(unitName, [{"name": playerName, "zone": assignment.zoneId, "op": assignment.platoonDefinitionId}]);
+        nameList.push(unitName);
+      }
+    }
+  });
+  nameList = nameList.sort((a,b) => {
+    return (a < b) ? -1 : 1;
+  });
+  nameList.forEach((toon) => {
+    listSelections += `<option>${toon}</option>`;
+  });
+  document.getElementById("missingCharacter").innerHTML = listSelections;
+  buildPlayerList(document.getElementById("missingCharacter").value);
+}
+
+function buildPlayerList(selectedCharacter) {
+  if(selectedCharacter == null || !missingUnitMap.has(selectedCharacter)) {
+    return;
+  }
+  var playerHTML = "";
+  missingUnitMap.get(selectedCharacter).forEach((player) => {
+    playerHTML += `<tr><td><label>${player.name.name}</label></td><td><label>${territoryMap.get(player.zone).zoneColour} ${player.op.slice(-1)}</label></td></tr>`;
+  });
+
+  const tbody = document.querySelector(`#id_playersAssigned tbody`);
+  tbody.innerHTML = playerHTML;
+
+}
+
+function loadMissingPlatoonsPage() {
+  document.getElementById('id_page_name').innerHTML='<label>Missing Platoons</label>';
+  //document.getElementById("id_main_container").innerHTML = `<iframe src="missing_platoons.html" style="width:100%; height:80vh; border:none;"></iframe>`;
+  document.getElementById("id_main_container").innerHTML = `<div class="spacing-div">
+    <label for="phaseSelect">Select Phase:</label>
+    <select id="phaseSelect" onchange="buildCharacterList(this.value);">
+      <option value="0">Phase 1</option>
+      <option value="1">Phase 2</option>
+      <option value="2">Phase 3</option>
+      <option value="3">Phase 4</option>
+      <option value="4">Phase 5</option>
+      <option value="5">Phase 6</option>
+    </select>
+  </div>
+
+  <div class="spacing-div">
+    <label for="phaseSelect">Missing Toon:</label>
+    <select id="missingCharacter" onchange="buildPlayerList(this.value);">
+    </select>
+  </div>
+
+
+<table id="id_playersAssigned">
+  <colgroup>
+    <col />
+    <col style="width: 5em;"/>
+  </colgroup>
+  <thead>
+    <tr style="display: none;">
+      <th>Player</th>
+      <th>Operation</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>`;
+
+    const now = new Date();
+    const utcDay = now.getUTCDay();
+    const utcHour = now.getUTCHours();
+    const adjustedDay = (utcDay + 6) % 7;
+    let index = utcHour < 17 ? (adjustedDay + 6) % 7 : adjustedDay;
+    index = index % 6;
+
+    buildCharacterList(index);
+    document.getElementById("phaseSelect").value = index;
+
   reloadMenu();
 }
