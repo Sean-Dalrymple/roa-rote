@@ -1,0 +1,14 @@
+[
+    {"warNumber": 1, "date": "2026-02-08", "skip": 1},
+    {"warNumber": 2, "date": "2026-02-13", "skip": 2},
+    {"warNumber": 3, "date": "2026-02-22", "skip": 3},
+    {"warNumber": 4, "date": "2026-02-27", "skip": 4},
+    {"warNumber": 5, "date": "2026-03-08", "skip": 1},
+    {"warNumber": 6, "date": "2026-03-13", "skip": 2},
+    {"warNumber": 7, "date": "2026-03-22", "skip": 3},
+    {"warNumber": 8, "date": "2026-03-27", "skip": 4},
+    {"warNumber": 9, "date": "2026-04-05", "skip": 1},
+    {"warNumber": 10, "date": "2026-04-10", "skip": 2},
+    {"warNumber": 11, "date": "2026-04-19", "skip": 3},
+    {"warNumber": 12, "date": "2026-04-24", "skip": 4}
+]

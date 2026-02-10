@@ -8,6 +8,7 @@
   let players = [];
   let playerAlts = [];
   let warDef = [];
+  let warCalendar = [];
   let rotePlan = [];
 
 async function initializeApp() {
@@ -22,6 +23,7 @@ function reloadMenu() {
   setTimeout(() => {
     document.getElementById("id_menuDropdown").innerHTML = `<a href="javascript:loadAssignmentPage();">Platoon Assignments</a>
       <a href="javascript:loadRoTEPage();">RoTE Daily Plan</a>
+      <a href="javascript:loadTWCalendarPage();">Territory War Calendar</a>
       <a href="javascript:loadTWPage();">Territory War Def</a>
       <a href="javascript:loadAboutPage();">About</a>
       <a href="javascript:loadSettingsPage();">Settings</a>
@@ -82,6 +84,7 @@ console.log("refreshing data");
         fetch("data/players.json", { cache: "no-store" }),
         fetch("data/war_def.json", { cache: "no-store" }),
         fetch("data/rote_plan.json", { cache: "no-store" }),
+        fetch("data/war_calendar.json", { cache: "no-store" }),
       ]);
 
       const jsons = await Promise.all(responses.map((r) => r.json()));
@@ -96,6 +99,7 @@ console.log("refreshing data");
       players = jsons[8];
       warDef = jsons[9];
       rotePlan = jsons[10];
+      warCalendar = jsons[11];
 
       localStorage.setItem("dataVersion", assignmentVersion);
       localStorage.setItem("allAssignments", JSON.stringify(allAssignments));
@@ -104,6 +108,7 @@ console.log("refreshing data");
       localStorage.setItem("players", JSON.stringify(players));
       localStorage.setItem("warDef", JSON.stringify(warDef));
       localStorage.setItem("rotePlan", JSON.stringify(rotePlan));
+      localStorage.setItem("warCalendar", JSON.stringify(warCalendar));
 
 
       unitMap = new Map(allUnits.map(u => [u.unitBaseId, u]));
@@ -116,6 +121,7 @@ console.log("reading local data");
       players = JSON.parse(localStorage.getItem("players"));
       warDef = JSON.parse(localStorage.getItem("warDef"));
       rotePlan = JSON.parse(localStorage.getItem("rotePlan"));
+      warCalendar = JSON.parse(localStorage.getItem("warCalendar"));
 
       unitMap = new Map(allUnits.map(u => [u.unitBaseId, u]));
       territoryMap = new Map(allTerritories.map(t => [t.zoneId, t]));
@@ -373,7 +379,6 @@ function createPlatoonsRow(phase, zoneId) {
     gridItem2.appendChild(getPlatoonAssignmentStatus(phase, zoneId, i+3));
     platoonGrid.appendChild(gridItem2);
   }
-  // ✓ ⛔ ⚠ 
 
   cell.appendChild(platoonGrid);
   row.appendChild(cell);
@@ -522,6 +527,33 @@ rotePlan.forEach( (phase) => {
 
 function loadRoTEPage() {
   checkForPlanData().then( () => {asyncLoadRotEPage();} );
+}
+
+function loadTWCalendarPage() {
+  document.getElementById('id_page_name').innerHTML='<label>TW Calendar</label>';
+  var mainAccount = localStorage.getItem("selectedPlayer");
+  if(!mainAccount) {
+    document.getElementById("id_main_container").innerHTML = `<p>Please select an account in Settings.</p>`;
+    return;
+  }
+  var warGroup = (players.find(a => a.allyCode === mainAccount) || {name: ""}).warGroup;
+
+  document.getElementById("id_main_container").innerHTML = `<p>You are in Group <strong>${warGroup}</strong></p>`;
+  
+  warCalendar.filter( war => {
+      const warDate = new Date(war.date);
+      const today = new Date();
+      today.setDate(today.getDate() - 1);
+      return warDate >= today;
+    }
+  ).forEach( war => {
+    const warDate = new Date(war.date);
+    const warInfo = document.createElement("p");
+    const warLabel = document.createElement("label");
+    warLabel.textContent = `${warDate.toLocaleDateString()} (${(war.skip == warGroup) ? "Skip" : "Join"})`;
+    warInfo.appendChild(warLabel);
+    document.getElementById("id_main_container").appendChild(warInfo);
+  });
 }
 
 function buildWarDefTable() {
