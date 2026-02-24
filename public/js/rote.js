@@ -531,32 +531,32 @@ function loadRoTEPage() {
 
 function loadTWCalendarPage() {
   checkForPlanData().then( () => {
-  document.getElementById('id_page_name').innerHTML='<label>TW Calendar</label>';
-  var mainAccount = localStorage.getItem("selectedPlayer");
-  if(!mainAccount) {
-    document.getElementById("id_main_container").innerHTML = `<p>Please select an account in Settings.</p>`;
-    return;
-  }
-  var warGroup = (players.find(a => a.allyCode === mainAccount) || {name: ""}).warGroup;
-
-  document.getElementById("id_main_container").innerHTML = `<p>You are in Group <strong>${warGroup}</strong></p>`;
-  
-  warCalendar.filter( war => {
-      const warDate = new Date(war.date);
-      const today = new Date();
-      today.setDate(today.getDate() - 1);
-      return warDate >= today;
+    document.getElementById('id_page_name').innerHTML='<label>TW Calendar</label>';
+    var mainAccount = localStorage.getItem("selectedPlayer");
+    if(!mainAccount) {
+      document.getElementById("id_main_container").innerHTML = `<p>Please select an account in Settings.</p>`;
+      return;
     }
-  ).forEach( war => {
-    const warDate = new Date(war.date);
-    const warInfo = document.createElement("p");
-    const warLabel = document.createElement("label");
-    warLabel.textContent = `${warDate.toLocaleDateString()} (${(war.skip == warGroup) ? "Skip" : "Join"})`;
-    warInfo.appendChild(warLabel);
-    document.getElementById("id_main_container").appendChild(warInfo);
-  });
+    var warGroup = (players.find(a => a.allyCode === mainAccount) || {name: ""}).warGroup;
 
-});
+    document.getElementById("id_main_container").innerHTML = `<p>You are in Group <strong>${warGroup}</strong></p>`;
+    
+    warCalendar.filter( war => {
+        const warDate = new Date(war.date);
+        const today = new Date();
+        today.setDate(today.getDate() - 1);
+        return warDate >= today;
+      }
+    ).forEach( war => {
+      const warDate = new Date(war.date);
+      const warInfo = document.createElement("p");
+      const warLabel = document.createElement("label");
+      warLabel.textContent = `${war.date} (${(war.skip == warGroup) ? "Skip" : "Join"})`;//`${warDate.toLocaleDateString()} (${(war.skip == warGroup) ? "Skip" : "Join"})`;
+      warInfo.appendChild(warLabel);
+      document.getElementById("id_main_container").appendChild(warInfo);
+    });
+    reloadMenu();
+  });
   reloadMenu();
 }
 
@@ -767,7 +767,7 @@ function addPlayerAltRow(playerId, playerName) {
   row.id = `id_alt${playerId}`;
 
   const opCell = document.createElement("td");
-  opCell.innerHTML = `<label>${playerName}</label>`;
+  opCell.innerHTML = `<div id="id_alt${playerId}_div" style="display: grid; grid-template-columns: 3em auto; gap: 5px; grid-template-rows: 1.2em 1.2em 1.2em;"></div>`;
 
   const unitCell = document.createElement("td");
   unitCell.innerHTML = `<button class="menu-button" onclick="removeAlt(${playerId});">&#x274C;</button>`;
@@ -777,6 +777,8 @@ function addPlayerAltRow(playerId, playerName) {
 
   const tbody = document.querySelector("#id_altTable tbody");
   tbody.appendChild(row);
+
+  loadPlayerInfo(playerId, `id_alt${playerId}_div`);
 
   return true;
 }
@@ -816,11 +818,25 @@ function loadAltAccounts() {
   });
 }
 
+function loadPlayerInfo(playerId, element) {
+  var player = players.find(a => a.allyCode === playerId);
+  if(player == null) {
+    return;
+  }
+  document.getElementById(element).innerHTML = `
+  <img id="id_PlayerAvatar" src="https://game-assets.swgoh.gg/textures/${player.portrait}" style="height: 2.5em; grid-row: 2; grid-column: 1; align-self: center;" alt="Player Image">
+  <label style="grid-row: 1; grid-column: 2;">${player.name}</label>
+  <label style="grid-row: 2; grid-column: 2;">${player.allyCode.replace(/.{3}(?!$)/g, '$&-')}</label>
+  <label style="grid-row: 3; grid-column: 2;">War group ${player.warGroup}</label>`;
+}
+
 function loadSettingsPage() {
   document.getElementById("id_main_container").innerHTML = `
   <div class="spacing-div">
     <label for="playerSelect">Main Account:</label>
-    <select id="playerSelect" onchange="localStorage.setItem('selectedPlayer', this.value);" style="margin: 0 0 0 auto;"></select>
+    <select id="playerSelect" onchange="localStorage.setItem('selectedPlayer', this.value); loadPlayerInfo(this.value, 'id_playerInfo');" style="margin: 0 0 0 auto;"></select>
+  </div>
+  <div id="id_playerInfo" style="display: grid; grid-template-columns: 3em auto; gap: 5px; grid-template-rows: 1.2em 1.2em 1.2em;">
   </div>
   <div class="spacing-div">
     <label for="altPlayerSelect">Alt Accounts:</label>
@@ -850,12 +866,17 @@ function loadSettingsPage() {
       <option value="loadTWPage">Territory War Def</option>
     </select>
   </div>`;
+
   //    <option value="loadCountersPage">Territory War Counters</option>
   document.getElementById('id_page_name').innerHTML='<label>Settings</label>';
   populatePlayerSelect(players);
   document.getElementById('altPlayerSelect').innerHTML=`${document.getElementById('playerSelect').innerHTML}`;
   loadAltAccounts();
   document.getElementById('startingPage').value = (localStorage.getItem('startPage') || 'loadAssignmentPage');
+  const savedPlayer = localStorage.getItem("selectedPlayer");
+  if (savedPlayer) {
+    loadPlayerInfo(savedPlayer, 'id_playerInfo');
+  }
   reloadMenu();
 }
 

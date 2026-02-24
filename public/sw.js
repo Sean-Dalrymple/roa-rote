@@ -1,4 +1,4 @@
-const VERSION = "v1.0.14";
+const VERSION = "v1.0.15";
 
 const CACHE_NAME = "rote-cache-v2";
 const urlsToCache = [
@@ -25,6 +25,22 @@ self.addEventListener("fetch", event => {
   if (requestURL.hostname === "d1bmdfhj2yn3u7.cloudfront.net") {
     event.respondWith(
       caches.open("unit-images").then(cache =>
+        cache.match(event.request).then(response => {
+          if (response) return response;
+          return fetch(event.request).then(networkResponse => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+        })
+      )
+    );
+    return;
+  }
+
+  //https://game-assets.swgoh.gg/textures/
+  if (requestURL.hostname === "game-assets.swgoh.gg") {
+    event.respondWith(
+      caches.open("avatar-images").then(cache =>
         cache.match(event.request).then(response => {
           if (response) return response;
           return fetch(event.request).then(networkResponse => {
