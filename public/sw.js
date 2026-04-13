@@ -1,6 +1,6 @@
-const VERSION = "v1.0.15";
+const VERSION = "v1.0.12";
 
-const CACHE_NAME = "rote-cache-v2";
+const CACHE_NAME = "rote-cache-" + VERSION;
 const urlsToCache = [
   "./",
   "./index.html",
@@ -8,14 +8,43 @@ const urlsToCache = [
   "./js/rote.js",
   "./manifest.json",
   "./icon-192.png",
-  "./icon-512.png"
+  "./icon-512.png",
+  "./apple-touch-icon.png"
   // Add any static data or JSON files here if desired
 ];
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+      .then(() => {
+        console.log("Cache installed successfully");
+      })
+      .catch(err => console.error("Cache installation failed:", err))
   );
+  self.skipWaiting();
+});
+
+
+// ACTIVATE
+self.addEventListener("activate", event => {
+  console.log("A new version of the app is available. Please refresh to update.");
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(k => k !== "unit-images" && k !== "avatar-images" && k !== CACHE_NAME).map(k => caches.delete(k))
+      )
+    )
+  );
+  
+  self.clients.claim();
+
+  // Notify all clients that a new version is ready
+  self.clients.matchAll().then(clients => {
+    clients.forEach(client => {
+      client.postMessage({ type: "NEW_VERSION", version: VERSION });
+    });
+  });
 });
 
 self.addEventListener("fetch", event => {

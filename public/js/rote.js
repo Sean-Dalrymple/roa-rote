@@ -12,6 +12,7 @@
   let rotePlan = [];
 
 async function initializeApp() {
+  console.log("Initializing app...");
     await loadData();
     await loadSelectedPage();
 }
@@ -540,21 +541,55 @@ function loadTWCalendarPage() {
     var warGroup = (players.find(a => a.allyCode === mainAccount) || {name: ""}).warGroup;
 
     document.getElementById("id_main_container").innerHTML = `<p>You are in Group <strong>${warGroup}</strong></p>`;
-    
+
+    const warTable = document.createElement("table");
+    warTable.style.width = "fit-content";
+    warTable.style.borderCollapse = "collapse";
+    warTable.style.margin = "20px auto";
+    warTable.style.display = "block";
+    const tableHead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    ["Date", "Skip Group"].forEach(text => {
+      const th = document.createElement("th");
+      th.textContent = text;
+      headerRow.appendChild(th);
+    });
+    tableHead.appendChild(headerRow);
+    warTable.appendChild(tableHead);
+
+    const tableBody = document.createElement("tbody");
+
     warCalendar.filter( war => {
         const warDate = new Date(war.date);
         const today = new Date();
-        today.setDate(today.getDate() - 1);
+        today.setDate(today.getDate() - 2);
         return warDate >= today;
       }
     ).forEach( war => {
+      /*
       const warDate = new Date(war.date);
       const warInfo = document.createElement("p");
       const warLabel = document.createElement("label");
       warLabel.textContent = `${war.date} (${(war.skip == warGroup) ? "Skip" : "Join"})`;//`${warDate.toLocaleDateString()} (${(war.skip == warGroup) ? "Skip" : "Join"})`;
       warInfo.appendChild(warLabel);
       document.getElementById("id_main_container").appendChild(warInfo);
+      */
+
+      const row = document.createElement("tr");
+      const dateCell = document.createElement("td");
+      const dateLabel = document.createElement("label");
+      dateLabel.textContent = war.date;
+      dateCell.appendChild(dateLabel);
+      const skipCell = document.createElement("td");
+      const skipLabel = document.createElement("label");
+      skipLabel.textContent = war.skip + (war.skip == warGroup ? " - Skip" : "");
+      skipCell.appendChild(skipLabel);
+      row.appendChild(dateCell);
+      row.appendChild(skipCell);
+      tableBody.appendChild(row);
     });
+    warTable.appendChild(tableBody);
+    document.getElementById("id_main_container").appendChild(warTable);
     reloadMenu();
   });
   reloadMenu();
@@ -751,7 +786,7 @@ function loadCountersPage() {
 
 function loadAboutPage() {
 document.getElementById("id_main_container").innerHTML = `<h1>RoA ROTE Platoon Assignments</h1>
-<p style="color: white;">Version 1.0.10</p>
+<p style="color: white;">Version 1.0.12</p>
 <p style="color: white;">Copyright 2025, I guess?</p><p>Copy it all you want.</p>
 <p>"Mi código es tu código" as they really don't say anywhere.</p>
 <p style="color: white;">data version: ${localStorage.getItem("dataVersion")}</p>`;
